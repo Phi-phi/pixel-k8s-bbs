@@ -1,10 +1,10 @@
+// src/health/health.controller.ts
 import { Controller, Get } from '@nestjs/common';
 
 @Controller('health')
-export class AppController {
-
+export class HealthController {
   @Get()
-  getHello(): string {
+  checkHealth(): string {
     return 'OK';
   }
 }
