@@ -57,7 +57,7 @@ metadata:
   labels:
     app: frontend
 spec:
-  type: ClusterIP  # 外部から直接アクセスしないように変更
+  type: LoadBalancer
   ports:
   - port: 80
     targetPort: 3000
