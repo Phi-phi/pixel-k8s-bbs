@@ -57,9 +57,9 @@ metadata:
   labels:
     app: frontend
 spec:
-  type: NodePort
+  type: ClusterIP  # 外部から直接アクセスしないように変更
   ports:
-  - port: 8080
+  - port: 80
     targetPort: 3000
   selector:
     app: frontend
