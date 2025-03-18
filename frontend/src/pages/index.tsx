@@ -1,18 +1,25 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+interface Post {
+    id: number;
+    content: string;
+}
+
 export default function Home() {
-  const [posts, setPosts] = useState([]);
-  const [content, setContent] = useState('');
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [content, setContent] = useState('');
+
+  const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
 
   useEffect(() => {
-    axios.get('/api/posts').then((res) => setPosts(res.data));
+    axios.get<Post[]>(`${BACKEND_URL}/posts`).then((res) => setPosts(res.data));
   }, []);
 
   const submitPost = () => {
-    axios.post('/api/posts', { content }).then(() => {
+    axios.post(`${BACKEND_URL}/posts`, { content }).then(() => {
       setContent('');
-      axios.get('/api/posts').then((res) => setPosts(res.data));
+      axios.get<Post[]>(`${BACKEND_URL}/posts`).then((res) => setPosts(res.data));
     });
   };
 
@@ -22,7 +29,7 @@ export default function Home() {
       <input value={content} onChange={(e) => setContent(e.target.value)} />
       <button onClick={submitPost}>投稿</button>
       <ul>
-        {posts.map((post: any) => (
+        {posts.map((post: Post) => (
           <li key={post.id}>{post.content}</li>
         ))}
       </ul>
