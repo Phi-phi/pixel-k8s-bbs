@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: boarddb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    container_name: nest-backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USERNAME=admin
+      - DB_PASSWORD=secret
+      - DB_DATABASE=boarddb
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    container_name: next-frontend
+    restart: always
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=development
+      - API_URL=http://backend:3000
+    ports:
+      - "3001:3000"
+
+volumes:
+  mysql-data:
